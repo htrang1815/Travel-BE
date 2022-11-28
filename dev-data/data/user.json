@@ -1,0 +1,17 @@
+{
+  "_id": "6357accee74845284ff40a06",
+  "name": "chau123",
+  "email": "chau123@gmail.com",
+  "dateOfBirth": "2021-10-25T09:30:54.000Z",
+  "typeAccount": "default",
+  "role": "user",
+  "avatarUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn9ZaICvJMOGSbKmoSCbt08xi2-o-sMqmFuEsqE2M&s",
+  "bookmark": [],
+  "password": "12345678",
+  "passwordConfirm": "12345678",
+  "passwordChangedAt": "",
+  "passwordResetToken": "",
+  "passwordResetExpires": "",
+  "phone": "",
+  "country": "Viet Nam"
+}
