@@ -1,4 +1,4 @@
-/node_modules
-/.pnp
+./node_modules
+./.pnp
 
-/config.env
+./config.env
