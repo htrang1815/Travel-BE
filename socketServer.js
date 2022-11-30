@@ -84,11 +84,19 @@ const resgisterSocketServer = (server) => {
     });
 
     socket.on("remove-myblog", async (data) => {
-      // const { userId, blogId } = data;
+      const { userId, blogId } = data;
+      await Blog.findByIdAndDelete(blogId);
+      const blogUserAfterDelete = await Blog.find({ user: userId });
+      socket.to(userId).emit("sendRemoveMyBlogToClient", blogUserAfterDelete);
+    });
+
+    socket.on("remove-myblog", async (data) => {
+      const { path, id } = data;
       // await Blog.findByIdAndDelete(blogId);
       // const blogUserAfterDelete = await Blog.find({ user: userId });
       // socket.to(userId).emit("sendRemoveMyBlogToClient", blogUserAfterDelete);
     });
+
 
     socket.on("remove-myreview", async (data) => {
       const { userId, reviewId } = data;

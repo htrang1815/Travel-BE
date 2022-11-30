@@ -67,7 +67,10 @@ const projectSchema = new mongoose.Schema(
         type: String,
       },
     },
-    startDates: [Date],
+    startDates: {
+      type: Date,
+      // default: Date.now(),
+    },
     startLocation: {
       // GeoJSON
       type: {

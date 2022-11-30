@@ -80,26 +80,39 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 });
 
 exports.getProjectsByFilter = catchAsync(async (req, res) => {
-  const { name, limit = 20 } = req.query;
-  const { ratingAverageSort = -1, priceSort = -1 } = req.query;
+  const { lenght, price, date, name } = req.body;
+  // const { ratingAverageSort = -1, priceSort = -1 } = req.query;
+  const start = new Date("01".concat(" ", date));
+  const end = new Date("31".concat(" ", date));
+
+  console.log(lenght, price, date, name );
+  console.log(start, end);
+
   const match = {};
-  const sort = {};
+  // const month = {};
 
   if (name) {
-    match.name = name;
+    match.name = { $regex: name, $options: "i" };
   }
 
-  if (ratingAverageSort) {
-    sort.ratingAverage = ratingAverageSort;
-  }
-  if (priceSort) {
-    sort.price = priceSort;
+  if (lenght) {
+    match.duration = { $gt: lenght[0], $lt: lenght[1] };
   }
 
-  const projects = await Project.aggregate()
-    .match({ ...match })
-    .sort({ ...sort })
-    .limit(+limit);
+  if (price) {
+    match.price = { $gt: price[0], $lt: price[1] };
+  }
+
+  if (date) {
+    match.createdAt = { $gte: new Date(start), $lte: new Date(end) };
+  }
+
+  console.log(match);
+
+  const projects = await Project.aggregate().match({ ...match });
+  //   .sort({ ...sort })
+  //   .limit(+limit);
+  // console.log(projects);
 
   res.status(200).json({
     status: "success",
