@@ -82,11 +82,12 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 exports.getProjectsByFilter = catchAsync(async (req, res) => {
   const { lenght, price, date, name } = req.body;
   // const { ratingAverageSort = -1, priceSort = -1 } = req.query;
-  const start = new Date("01".concat(" ", date));
+  const start = new Date("02".concat(" ", date));
   const end = new Date("31".concat(" ", date));
 
-  console.log(lenght, price, date, name );
+  console.log(lenght, price, date, name);
   console.log(start, end);
+  // console.log(date);
 
   const match = {};
   // const month = {};

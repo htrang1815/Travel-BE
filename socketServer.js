@@ -4,6 +4,8 @@ const Blog = require("./models/blogModel");
 const serverStore = require("./serverStore");
 const disconnectHandler = require("./socketHandlers/disconnectHandler");
 const newConnectionHandler = require("./socketHandlers/newConnectionHandler");
+const Guide = require("./models/guideModel");
+const Project = require("./models/projectModel");
 
 const resgisterSocketServer = (server) => {
   const io = require("socket.io")(server, {
@@ -55,7 +57,30 @@ const resgisterSocketServer = (server) => {
       user.bookmark = user.bookmark.filter((place) => place["id"] !== placeId);
       user.save({ validateBeforeSave: false });
 
-      socket.to(userId).emit("sendRemoveFavouriteToClient", user);
+      socket.to(userId).emit("sendAdminDeleteToClient", user);
+    });
+
+    socket.on("admin-delete", async (data) => {
+      const { userId, path, id } = data;
+      console.log(data);
+      if (path === "userprofile") {
+        await User.findByIdAndDelete(id);
+        const res = User;
+      } else if (path === "guides") {
+        await Guide.findByIdAndDelete(id);
+        const res = Guide;
+      } else if (path === "blogs") {
+        await Blog.findByIdAndDelete(id);
+        const res = Blog;
+      } else if (path === "reviews") {
+        await Review.findByIdAndDelete(id);
+        const res = Review;
+      } else if (path === "projects") {
+        await Project.findByIdAndDelete(id);
+        const res = Project;
+      }
+      // console.log(res)
+      socket.to(userId).emit("sendRemoveFavouriteToClient", res, path);
     });
 
     socket.on(
@@ -96,7 +121,6 @@ const resgisterSocketServer = (server) => {
       // const blogUserAfterDelete = await Blog.find({ user: userId });
       // socket.to(userId).emit("sendRemoveMyBlogToClient", blogUserAfterDelete);
     });
-
 
     socket.on("remove-myreview", async (data) => {
       const { userId, reviewId } = data;
