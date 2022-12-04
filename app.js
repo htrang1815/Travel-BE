@@ -15,6 +15,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const guideRoutes = require("./routes/guideRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const userProfileRoutes = require("./routes/userProfileRoutes");
+const sendEmailRoutes = require("./routes/sendEmailRoutes");
 
 // => morgan giúp cta có thể xem đc kết quả của request ngay trên console.log
 
@@ -43,6 +44,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 // C. ROUTES
+app.use("/api/v1/email", sendEmailRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/reviews", reviewRoutes);

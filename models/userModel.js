@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const types = ["default", "google", "facebook"];
 const typesForUnrequired = ["google", "facebook"];
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   name: {

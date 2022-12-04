@@ -132,8 +132,8 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 });
 
 reviewSchema.post(/^findOneAnd/, async function () {
-  await this.r.constructor.calcAverageRatings(this.r.place?._id);
-  await this.r.constructor.calcAverageRatingsGuide(this.r.guide?._id);
+  await this.r?.constructor.calcAverageRatings(this.r.place?._id);
+  await this.r?.constructor.calcAverageRatingsGuide(this.r.guide?._id);
 });
 
 const Review = mongoose.model("Review", reviewSchema);

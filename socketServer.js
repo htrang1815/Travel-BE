@@ -55,32 +55,33 @@ const resgisterSocketServer = (server) => {
       const { userId, placeId } = data;
       const user = await User.findById(userId);
       user.bookmark = user.bookmark.filter((place) => place["id"] !== placeId);
-      user.save({ validateBeforeSave: false });
+      await user.save({ validateBeforeSave: false });
 
-      socket.to(userId).emit("sendAdminDeleteToClient", user);
+      socket.to(userId).emit("sendRemoveFavouriteToClient", user);
     });
 
-    socket.on("admin-delete", async (data) => {
+    socket.on("admindelete", async (data) => {
       const { userId, path, id } = data;
-      console.log(data);
+      console.log("data", data);
+      let res;
       if (path === "userprofile") {
         await User.findByIdAndDelete(id);
-        const res = User;
+        res = await User.find();
       } else if (path === "guides") {
         await Guide.findByIdAndDelete(id);
-        const res = Guide;
+        res = await Guide.find();
       } else if (path === "blogs") {
         await Blog.findByIdAndDelete(id);
-        const res = Blog;
+        res = await Blog.find();
       } else if (path === "reviews") {
-        await Review.findByIdAndDelete(id);
-        const res = Review;
+        // await Review.findByIdAndDelete(id);
+        res = await Review.find();
       } else if (path === "projects") {
         await Project.findByIdAndDelete(id);
-        const res = Project;
+        res = await Project.find();
       }
-      // console.log(res)
-      socket.to(userId).emit("sendRemoveFavouriteToClient", res, path);
+      console.log({ res, path });
+      socket.to(userId).emit("sendAdminDeleteToClient", res);
     });
 
     socket.on(
@@ -98,14 +99,14 @@ const resgisterSocketServer = (server) => {
     );
 
     socket.on("update-review", async (data) => {
-      const { values, reviewId, rating, userId } = data;
-      await Review.findByIdAndUpdate(reviewId, {
-        name: values.review,
-        rating: rating,
+      console.log(data);
+      await Review.findByIdAndUpdate(data._id, {
+        review: data.review,
+        rating: data.rating,
       });
-      const review = Review.find({ user: userId });
-      // console.log(review);
-      socket.to(userId).emit("sendUpdateReview", review);
+      const review = await Review.find({ user: data.user._id });
+      console.log(review);
+      socket.to(data.user._id).emit("sendUpdateReview", review);
     });
 
     socket.on("remove-myblog", async (data) => {

@@ -27,9 +27,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
           product_data: {
             name: `${project.name}`,
             description: project.summary,
-            images: [
-              "https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-            ],
+            images: [project.images[0]],
           },
         },
         quantity: 1,
@@ -41,5 +39,101 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
   res.status(200).json({
     status: "success",
     session,
+  });
+});
+
+const createBookingCheckout = async (session) => {
+  const tour = session.client_reference_id;
+  const user = await User.findOne({ email: session.customer_email }).id;
+  const price = session.line_items[0].amount / 100;
+  await Booking.create({ tour, user, price });
+};
+
+exports.webhookCheckout = catchAsync(async (req, res, next) => {
+  // B1: tạo 1 chữ ký để xác thực dữ liệu đến trong body
+  const signature = req.headers["stripe-signature"];
+
+  // B2: Tạo event
+  let event;
+  try {
+    event = stripeAPI.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  // B3:
+  if (event.type === "checkout.session.completed") {
+    createBookingCheckout(event.data.object);
+  }
+});
+
+exports.createBooking = catchAsync(async (req, res) => {
+  const newBooking = await Booking.create(req.body);
+  res.status(201).json({
+    status: "success",
+    data: {
+      booking: newBooking,
+    },
+  });
+});
+
+exports.getAllBookings = catchAsync(async (req, res) => {
+  const bookings = await Booking.find();
+  res.status(200).json({
+    status: "success",
+    results: bookings.length,
+    data: {
+      bookings,
+    },
+  });
+});
+
+exports.getBooking = catchAsync(async (req, res, next) => {
+  const booking = await Booking.findById(req.params.id);
+
+  if (!booking) {
+    return next(new AppError("No document found with that ID", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      booking,
+    },
+  });
+});
+
+exports.updateBooking = catchAsync(async (req, res, next) => {
+  const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    // (để nó sẽ trả về document mới nhất)
+    runValidators: true,
+    // (có chạy trình validate)
+  });
+
+  if (!booking) {
+    return next(new AppError("No booking found with that ID", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      booking,
+    },
+  });
+});
+
+exports.deleteBooking = catchAsync(async (req, res, next) => {
+  const booking = await Booking.findByIdAndDelete(req.params.id);
+  if (!booking) {
+    return next(new AppError("No booking found with that ID", 404));
+  }
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });
