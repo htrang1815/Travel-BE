@@ -25,8 +25,8 @@ const app = express();
 
 // 1.5. CORS (Để frontend và backend có thể kết nối vs nhau)
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-// https://travelbooking.homes
+app.use(cors({ credentials: true, origin: "https://travelbooking.homes" }));
+// http://localhost:3000
 
 // 2. Để data dc gửi sang client sẽ đc chuyển
 // đổi sang kiểu json()
