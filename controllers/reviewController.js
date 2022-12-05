@@ -8,7 +8,16 @@ exports.getAllReviews = catchAsync(async (req, res) => {
   if (req.params.placeId) filter = { place: req.params.placeId };
   if (req.params.guideId) filter = { guide: req.params.guideId };
 
-  const reviews = await Review.find(filter);
+  let query = Review.find(filter);
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    // query = query.sort("-createdAt");
+  }
+
+  const reviews = await query;
   res.status(200).json({
     status: "success",
     results: reviews.length,
@@ -20,8 +29,16 @@ exports.getAllReviews = catchAsync(async (req, res) => {
 
 exports.getAllReviewInAUser = catchAsync(async (req, res) => {
   const { userId } = req.body;
+  let query = Review.find({ user: userId });
 
-  const myreview = await Review.find({ user: userId });
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    // query = query.sort("-createdAt");
+  }
+
+  const myreview = await query;
   res.status(200).json({
     status: "success",
     data: {

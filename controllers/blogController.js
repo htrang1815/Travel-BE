@@ -5,22 +5,12 @@ const Blog = require("../models/blogModel");
 exports.getAllBlogs = catchAsync(async (req, res, next) => {
   // const blogs = await Blog.find();
   let query = Blog.find();
-  const excludedFields = ["page", "limit"];
-  const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 4;
-  const skip = (page - 1) * limit;
 
-  if (req.query.page) {
-    query = query.skip(skip).limit(limit);
-    const numPlaces = await Blog.countDocuments();
-    console.log("numPlaces", numPlaces);
-    console.log("skip", skip);
-    if (skip >= numPlaces) {
-      next(new AppError("This page does not exist", 404));
-    }
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
   } else {
-    // const limit = req.query.limit * 1 || 3;
-    query = Blog.find();
+    // query = query.sort("-createdAt");
   }
   const blogs = await query;
 
@@ -36,7 +26,16 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
 exports.getAllBlogInAUser = catchAsync(async (req, res) => {
   const { userId } = req.body;
   // console.log(userId);
-  const myblog = await Blog.find({ user: userId });
+  let query = Blog.find({ user: userId });
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    // query = query.sort("-createdAt");
+  }
+
+  const myblog = await query;
   // console.log("myblog", myblog);
   res.status(200).json({
     status: "success",

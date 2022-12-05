@@ -48,23 +48,6 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
       query = query.select("-__v");
     }
 
-    // D. Pagination
-    // const page = req.query.page * 1 || 1;
-    // const limit = req.query.limit * 1 || 4;
-    // const skip = (page - 1) * limit;
-
-    // if (req.query.page) {
-    //   query = query.skip(skip).limit(limit);
-    //   const numPlaces = await Project.countDocuments();
-    //   console.log("numPlaces", numPlaces);
-    //   console.log("skip", skip);
-    //   if (skip >= numPlaces) {
-    //     next(new AppError("This page does not exist", 404));
-    //   }
-    // }
-
-    // console.log(query);
-
     const projects = await query;
 
     // console.log("2", projects);
