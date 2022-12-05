@@ -12,7 +12,7 @@ const { Server } = require("socket.io");
 const resgisterSocketServer = (server) => {
   const io = Server(server, {
     cors: {
-      origin: "https://backend.travelbooking.homes",
+      origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
   });
