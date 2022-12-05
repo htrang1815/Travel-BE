@@ -16,6 +16,7 @@ const guideRoutes = require("./routes/guideRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const userProfileRoutes = require("./routes/userProfileRoutes");
 const sendEmailRoutes = require("./routes/sendEmailRoutes");
+const bookingController = require("./controllers/bookingController");
 
 // => morgan giúp cta có thể xem đc kết quả của request ngay trên console.log
 
@@ -42,7 +43,6 @@ app.post(
   express.raw({ type: "application/json" }),
   bookingController.webhookCheckout
 );
-
 
 // A. MIDDLEWARES
 app.use(morgan("dev"));
