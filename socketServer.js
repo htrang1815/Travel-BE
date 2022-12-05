@@ -7,10 +7,12 @@ const newConnectionHandler = require("./socketHandlers/newConnectionHandler");
 const Guide = require("./models/guideModel");
 const Project = require("./models/projectModel");
 
+const { Server } = require("socket.io");
+
 const resgisterSocketServer = (server) => {
-  const io = require("socket.io")(server, {
+  const io = Server(server, {
     cors: {
-      origin: "*",
+      origin: "https://backend.travelbooking.homes",
       methods: ["GET", "POST"],
     },
   });

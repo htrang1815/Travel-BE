@@ -37,6 +37,13 @@ app.use(
   })
 );
 
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  bookingController.webhookCheckout
+);
+
+
 // A. MIDDLEWARES
 app.use(morgan("dev"));
 
