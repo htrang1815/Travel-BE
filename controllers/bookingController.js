@@ -54,12 +54,12 @@ const createBookingCheckout = async (session) => {
 exports.webhookCheckout = catchAsync(async (req, res, next) => {
   // B1: tạo 1 chữ ký để xác thực dữ liệu đến trong body
   const signature = req.headers["stripe-signature"];
-  const reqBuffer = await buffer(req);
+  // const reqBuffer = await buffer(req);
   // B2: Tạo event
   let event;
   try {
     event = stripeAPI.webhooks.constructEvent(
-      reqBuffer.body,
+      req.body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
