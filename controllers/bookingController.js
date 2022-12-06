@@ -11,7 +11,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
   const { numberItem } = req.body;
   // 1. Lấy thông tin tour đc book
   const project = await Project.findById(req.params.tourId);
-  //   console.log(project);
+  console.log(project);
   const customer = await stripeAPI.customers.create({
     email: req.user.email,
   });
