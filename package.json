@@ -23,6 +23,7 @@
     "express-fileupload": "^1.4.0",
     "express-load": "^1.1.16",
     "jsonwebtoken": "^8.5.1",
+    "micro": "^10.0.1",
     "mongoose": "^6.6.5",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
