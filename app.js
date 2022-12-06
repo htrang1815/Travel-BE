@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fileupload = require("express-fileupload");
+const bodyParser = require("body-parser");
 
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
@@ -41,7 +42,7 @@ app.use(
 
 app.post(
   "/webhook-checkout",
-  express.raw({ type: "application/json" }),
+  bodyParser.raw({ type: "application/json" }),
   bookingController.webhookCheckout
 );
 
