@@ -12,6 +12,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
   // 1. Lấy thông tin tour đc book
   const project = await Project.findById(req.params.tourId);
   console.log(project);
+
   const customer = await stripeAPI.customers.create({
     email: req.user.email,
   });
@@ -67,7 +68,7 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
   let event;
   try {
     event = stripeAPI.webhooks.constructEvent(
-      req.body,
+      req.rawBody,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
