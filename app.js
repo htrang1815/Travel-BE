@@ -36,10 +36,8 @@ app.use(cors({ credentials: true, origin: "https://travelbooking.homes" }));
 
 app.use("/webhook-checkout", express.raw({ type: "*/*" }));
 app.use(
-  express
-    .json
-    // verify: (req, res, buffer) => (req["rawBody"] = buffer),
-    ()
+  express.json()
+  // verify: (req, res, buffer) => (req["rawBody"] = buffer),
 );
 
 app.post("/webhook-checkout", bookingController.webhookCheckout);
