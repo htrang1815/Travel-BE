@@ -2,6 +2,7 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = class Email {
+  //Hàm tạo
   constructor(user, resetToken, email) {
     this.user = user || "";
     this.to = user?.email || email;
