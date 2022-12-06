@@ -40,11 +40,9 @@ app.use(
   })
 );
 
-app.post(
-  "/webhook-checkout",
-  express.raw({ type: "*/*" }),
-  bookingController.webhookCheckout
-);
+app.use("/webhook-checkout", express.raw({ type: "*/*" }));
+
+app.post("/webhook-checkout", bookingController.webhookCheckout);
 
 // A. MIDDLEWARES
 app.use(morgan("dev"));
