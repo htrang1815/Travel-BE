@@ -5,14 +5,14 @@ const Booking = require("../models/bookingModel");
 
 exports.getCheckoutSession = catchAsync(async (req, res) => {
   const domainUrl = process.env.DOMAIN_URL;
-
+  const { numberItem } = req.body;
   // 1. Lấy thông tin tour đc book
   const project = await Project.findById(req.params.tourId);
   //   console.log(project);
   // 2. Create checkout session
   const session = await stripeAPI.checkout.sessions.create({
     payment_method_types: ["card"],
-    success_url: `${domainUrl}/success?place=${req.params.tourId}&user=${req.user.id}&price=${project.price}`,
+    success_url: `${domainUrl}/success?place=${req.params.tourId}`,
     cancel_url: `${domainUrl}/project/${req.params.tourId}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -30,7 +30,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
             images: [project.images[0]],
           },
         },
-        quantity: 1,
+        quantity: numberItem,
       },
     ],
     mode: "payment",

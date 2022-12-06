@@ -182,6 +182,19 @@ exports.signInWithGoogle = catchAsync(async (req, res) => {
   }
 });
 
+exports.signInWithFacebook = catchAsync(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  // console.log(user);
+  if (!user) {
+    const newUser = await User.create(req.body);
+    console.log(newUser);
+    await new Email(newUser).sendWelcomeEmail();
+    createSendToken(newUser, 201, res);
+  } else {
+    createSendToken(user, 200, res);
+  }
+});
+
 exports.forgotPassword = async (req, res, next) => {
   // 1. Lấy email ng dùng dùng muốn lấy lại mật khẩu
 

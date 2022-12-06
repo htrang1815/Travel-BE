@@ -10,9 +10,9 @@ const Project = require("./models/projectModel");
 const { Server } = require("socket.io");
 
 const resgisterSocketServer = (server) => {
-  const io = Server(server, {
+  const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "*",
       methods: ["GET", "POST"],
     },
   });
