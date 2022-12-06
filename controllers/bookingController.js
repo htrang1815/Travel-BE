@@ -4,6 +4,7 @@ const stripeAPI = require("../stripe");
 const Project = require("../models/projectModel");
 const catchAsync = require("../utils/catchAsync");
 const Booking = require("../models/bookingModel");
+const User = require("../models/userModel");
 
 exports.getCheckoutSession = catchAsync(async (req, res) => {
   const domainUrl = process.env.DOMAIN_URL;
@@ -47,6 +48,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
 const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = await User.findOne({ email: session.customer_email }).id;
+
   const price = session.line_items[0].amount / 100;
   await Booking.create({ tour, user, price });
 };
