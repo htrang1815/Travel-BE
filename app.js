@@ -34,12 +34,12 @@ app.use(cors({ credentials: true, origin: "https://travelbooking.homes" }));
 // 2. Để data dc gửi sang client sẽ đc chuyển
 // đổi sang kiểu json()
 
+app.use("/webhook-checkout", express.raw({ type: "*/*" }));
+
 app.use(
   express.json()
   // verify: (req, res, buffer) => (req["rawBody"] = buffer),
 );
-
-app.use("/webhook-checkout", express.raw({ type: "*/*" }));
 
 app.post("/webhook-checkout", bookingController.webhookCheckout);
 
