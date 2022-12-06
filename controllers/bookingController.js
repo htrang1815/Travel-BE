@@ -12,13 +12,18 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
   // 1. Lấy thông tin tour đc book
   const project = await Project.findById(req.params.tourId);
   //   console.log(project);
+  const customer = await stripeAPI.customers.create({
+    email: req.user.email,
+  });
   // 2. Create checkout session
   const session = await stripeAPI.checkout.sessions.create({
     payment_method_types: ["card"],
     success_url: `${domainUrl}/success?place=${req.params.tourId}`,
     cancel_url: `${domainUrl}/project/${req.params.tourId}`,
-    customer_email: req.user.email,
+    // customer_email: req.user.email,
+    customer: customer.id,
     client_reference_id: req.params.tourId,
+
     //-- Dữ liệu tour truyền vào Booking Page
     line_items: [
       {
@@ -46,11 +51,11 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
 });
 
 const createBookingCheckout = async (session) => {
-  // const tour = session.client_reference_id;
-  // const user = await User.findOne({ email: session.customer_email }).id;
+  const tour = session.client_reference_id;
+  const user = await User.findOne({ email: session.customer_email }).id;
 
-  // const price = session.line_items[0].amount / 100;
-  // await Booking.create({ tour, user, price });
+  const price = session.line_items[0].amount / 100;
+  await Booking.create({ tour, user, price });
   console.log(session);
 };
 
