@@ -42,7 +42,7 @@ app.use(
 
 app.post(
   "/webhook-checkout",
-  bodyParser.raw({ type: "application/json" }),
+  express.raw({ type: "*/*" }),
   bookingController.webhookCheckout
 );
 
