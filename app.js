@@ -43,11 +43,8 @@ app.use(cors({ credentials: true, origin: "https://travelbooking.homes" }));
 
 app.use(
   express.json({
-    verify: function (req, res, buf) {
-      var url = req.originalUrl;
-      if (url.startsWith("/webhook")) {
-        req.rawBody = buf.toString();
-      }
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
     },
   })
 );
