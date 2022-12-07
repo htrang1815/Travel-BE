@@ -4,7 +4,7 @@ const Blog = require("../models/blogModel");
 
 exports.getAllBlogs = catchAsync(async (req, res, next) => {
   // const blogs = await Blog.find();
-  let query = Blog.find({ "user.role": "user" });
+  let query = Blog.find();
 
   if (req.query.sort) {
     const sortBy = req.query.sort.split(",").join(" ");
