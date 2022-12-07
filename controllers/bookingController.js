@@ -63,6 +63,7 @@ const createBookingCheckout = async (session) => {
 exports.webhookCheckout = catchAsync(async (req, res, next) => {
   // B1: tạo 1 chữ ký để xác thực dữ liệu đến trong body
   const signature = req.headers["stripe-signature"];
+  console.log(signature);
   // const reqBuffer = await buffer(req);
   // B2: Tạo event
   let event;
@@ -72,6 +73,7 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log(event);
   } catch (err) {
     return res.status(400).send(`Webhook error: ${err.message}`);
   }
