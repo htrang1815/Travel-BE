@@ -27,6 +27,14 @@ blogSchema.pre(/^find/, function (next) {
   next();
 });
 
+blogSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name role avatarUrl",
+  });
+  next();
+});
+
 const Blog = mongoose.model("Blog", blogSchema);
 
 module.exports = Blog;
