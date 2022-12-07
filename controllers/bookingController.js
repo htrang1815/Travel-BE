@@ -64,6 +64,7 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
   // B1: tạo 1 chữ ký để xác thực dữ liệu đến trong body
   const signature = req.headers["stripe-signature"];
   console.log(signature);
+  console.log(req.body);
   // const reqBuffer = await buffer(req);
   // B2: Tạo event
   let event;
