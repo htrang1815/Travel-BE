@@ -68,11 +68,11 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
   // const reqBuffer = await buffer(req);
   // B2: Tạo event
   let event;
-  console.log({
-    body: req.body,
-    signature,
-    secret: process.env.STRIPE_WEBHOOK_SECRET,
-  });
+  // console.log({
+  //   body: req.body,
+  //   signature,
+  //   secret: process.env.STRIPE_WEBHOOK_SECRET,
+  // });
   try {
     event = await stripeAPI.webhooks.constructEvent(
       req.rawBody,
