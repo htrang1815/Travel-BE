@@ -67,7 +67,7 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
   // B2: Tạo event
   let event;
   try {
-    event = stripeAPI.webhooks.constructEvent(
+    event = await stripeAPI.webhooks.constructEvent(
       req.rawBody,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
